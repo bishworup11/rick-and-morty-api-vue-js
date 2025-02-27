@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-
-
+import { RouterLink, RouterView } from "vue-router";
 </script>
 
 <template>
-  
   <header>
     <div class="wrapper">
       <div class="logo">
@@ -16,10 +13,7 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/about">About</RouterLink>
       </nav>
     </div>
-   
   </header>
-
-
   <RouterView />
 </template>
 
@@ -28,6 +22,14 @@ header {
   background-color: #2c3e50;
   padding: 1rem 2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cards {
+  height: 700px;
+  background-color: rgb(27, 26, 26);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .wrapper {
@@ -68,7 +70,7 @@ nav a.router-link-active {
 }
 
 nav a.router-link-active::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
@@ -82,7 +84,7 @@ nav a.router-link-active::after {
     flex-direction: column;
     gap: 1rem;
   }
-  
+
   nav {
     width: 100%;
     justify-content: center;

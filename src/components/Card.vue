@@ -69,10 +69,10 @@
   overflow: hidden;
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-   width: 400px;
+  width: 600px;
   position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   border: 1px solid #eaeaea;
 }
 
@@ -116,9 +116,10 @@
 }
 
 .character-image {
-  width: 400px;
-  height: 300px;
+  width: 45%;
+  height: 100%;
   overflow: hidden;
+  background-color: #244e6b;
 }
 
 .character-image img {
@@ -134,6 +135,8 @@
 
 .character-info {
   padding: 1.5rem;
+ /* background-color: #244e6b; */
+  width: 55%;
 }
 
 .character-name {
