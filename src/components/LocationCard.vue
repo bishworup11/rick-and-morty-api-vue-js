@@ -76,7 +76,8 @@ const viewDetails = () => {
 }
 
 .location-header {
-  background-color: #ff9800;
+  /* background-color: #ff9800; */
+  background-color: #3498db;
   padding: 15px 20px;
   display: flex;
   justify-content: space-between;
@@ -92,7 +93,8 @@ const viewDetails = () => {
 
 .location-id {
   background-color: #1f2937;
-  color: #ff9800;
+  /* color: #ff9800; */
+  color: #f5f5f5;
   border-radius: 20px;
   padding: 3px 10px;
   font-weight: bold;
@@ -141,7 +143,8 @@ const viewDetails = () => {
 }
 
 .view-button {
-  background-color: #ff9800;
+  /* background-color: #ff9800; */
+  /* background-color: #3498db; */
   color: #1f2937;
   border: none;
   border-radius: 6px;
