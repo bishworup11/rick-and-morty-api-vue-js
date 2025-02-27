@@ -3,7 +3,8 @@ import Card from "@/components/Card.vue";
 import HeroBanner from "@/components/HeroBanner.vue";
 
 import axios from "axios";
-import { watch, ref, onMounted, computed, reactive } from "vue";
+import { watch, ref, reactive, computed, onMounted } from "vue";
+import { NPagination } from "naive-ui";
 
 interface Character {
   id: number;
@@ -12,39 +13,17 @@ interface Character {
   species: string;
   type: string;
   gender: string;
-  origin: {
-    name: string;
-    url: string;
-  };
-  location: {
-    name: string;
-    url: string;
-  };
+  origin: { name: string; url: string };
+  location: { name: string; url: string };
   image: string;
-  episode: string[]; // Array of episode URLs
+  episode: string[];
   url: string;
-  created: string; // ISO date string
+  created: string;
 }
 
-const characters = ref<Character[] | null>(null);
-const info = ref(null);
-
+const characters = ref<Character[]>([]);
+const info = ref<{ pages: number } | null>(null);
 const page = ref(1);
-
-const response = await axios.get<{ info: any; results: Character[] }>(
-  "https://rickandmortyapi.com/api/character"
-);
-console.log(response);
-characters.value = response.data.results;
-info.value = response.data.info;
-console.log(info.value, characters.value);
-
-watch(page, async () => {
-  const res = await axios.get<{ results: Character[] }>(
-    `https://rickandmortyapi.com/api/character/?page=${page.value}`
-  );
-  characters.value = res.data.results;
-});
 
 const filters = reactive({
   name: "",
@@ -54,51 +33,46 @@ const filters = reactive({
   gender: "",
 });
 
-const emit = defineEmits(["filter-change"]);
-
-// Generate URL query string based on active filters
-const getQueryString = () => {
+// Computed property to construct API query parameters
+const queryParams = computed(() => {
   const params = new URLSearchParams();
-
-  Object.entries(filters).forEach(([key, value]) => {
-    if (value) {
-      params.append(key, value);
-    }
-  });
-
+  params.append("page", page.value.toString());
+  if (filters.name) params.append("name", filters.name);
+  if (filters.status) params.append("status", filters.status);
+  if (filters.species) params.append("species", filters.species);
+  if (filters.type) params.append("type", filters.type);
+  if (filters.gender) params.append("gender", filters.gender);
   return params.toString();
-};
-
-// Compute if there are any active filters
-const hasActiveFilters = computed(() => {
-  return Object.values(filters).some((value) => value !== "");
 });
 
-// Get only the active filters
-const activeFilters = computed(() => {
-  return Object.fromEntries(
-    Object.entries(filters).filter(([_, value]) => value !== "")
-  );
-});
-
-// Apply filters and emit event with query string
-const applyFilters = () => {
-  const queryString = getQueryString();
-  emit("filter-change", queryString, { ...filters });
+// Function to fetch characters based on query parameters
+const fetchCharacters = async () => {
+  try {
+    const response = await axios.get<{
+      info: { pages: number };
+      results: Character[];
+    }>(`https://rickandmortyapi.com/api/character/?${queryParams.value}`);
+    characters.value = response.data.results;
+    info.value = response.data.info;
+  } catch (error) {
+    console.error("Error fetching characters:", error);
+    characters.value = [];
+  }
 };
 
-// Clear all filters
+// Watchers to trigger API call when filters or page changes
+watch([queryParams, page], fetchCharacters, { immediate: true });
+
+// Function to reset filters and go back to page 1
 const clearFilters = () => {
-  Object.keys(filters).forEach((key) => {
-    filters[key] = "";
+  Object.assign(filters, {
+    name: "",
+    status: "",
+    species: "",
+    type: "",
+    gender: "",
   });
-  applyFilters();
-};
-
-// Remove a specific filter
-const removeFilter = (key: any) => {
-  filters[key] = "";
-  applyFilters();
+  page.value = 1;
 };
 </script>
 
@@ -112,14 +86,13 @@ const removeFilter = (key: any) => {
         v-model="filters.name"
         type="text"
         placeholder="Filter by name"
-        @input="applyFilters"
       />
     </div>
 
     <!-- Status filter -->
     <div class="filter-item">
       <label for="status">Status</label>
-      <select id="status" v-model="filters.status" @change="applyFilters">
+      <select id="status" v-model="filters.status">
         <option value="">Any</option>
         <option value="alive">Alive</option>
         <option value="dead">Dead</option>
@@ -135,26 +108,13 @@ const removeFilter = (key: any) => {
         v-model="filters.species"
         type="text"
         placeholder="Filter by species"
-        @input="applyFilters"
       />
     </div>
-
-    <!-- Type filter
-    <div class="filter-item">
-      <label for="type">Type</label>
-      <input
-        id="type"
-        v-model="filters.type"
-        type="text"
-        placeholder="Filter by type"
-        @input="applyFilters"
-      />
-    </div> -->
 
     <!-- Gender filter -->
     <div class="filter-item">
       <label for="gender">Gender</label>
-      <select id="gender" v-model="filters.gender" @change="applyFilters">
+      <select id="gender" v-model="filters.gender">
         <option value="">Any</option>
         <option value="female">Female</option>
         <option value="male">Male</option>
@@ -176,6 +136,15 @@ const removeFilter = (key: any) => {
       :character="character"
     />
   </div>
+
+  <!-- Naive UI Pagination -->
+  <div class="pagination">
+    <n-pagination
+      v-model:page="page"
+      :page-count="info?.pages || 1"
+      show-quick-jumper
+    />
+  </div>
 </template>
 
 <style scoped>
@@ -187,31 +156,14 @@ const removeFilter = (key: any) => {
   gap: 1rem;
   background-color: rgba(0, 0, 0, 0.5);
 }
-/* filter style */
 
-.filters-container {
-  width: 100%;
-  background-color: #3c3e44;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 24px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.filters-title {
-  color: #ffffff;
-  margin-top: 0;
-  margin-bottom: 16px;
-  font-size: 1.2rem;
-}
-
+/* Filters Styling */
 .filters-row {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  align-items: flex-end;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   padding: 0.5rem 1rem;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
@@ -221,8 +173,6 @@ const removeFilter = (key: any) => {
   flex-direction: column;
   min-width: 150px;
   flex: 1;
-  justify-content: center;
-  /* align-items: center; */
 }
 
 .filter-item label {
@@ -242,28 +192,11 @@ const removeFilter = (key: any) => {
   font-size: 0.95rem;
 }
 
-.filter-item input:focus,
-.filter-item select:focus {
-  outline: none;
-  border-color: #ff9800;
-}
-
-.filter-item input::placeholder {
-  color: #6d6d6d;
-}
-
-.filter-actions {
-  display: flex;
-  align-items: flex-end;
-  padding-bottom: 2px;
-}
-
 .clear-button {
   background-color: #e74c3c;
   color: white;
   border: none;
   border-radius: 6px;
-  margin-top: 1.8rem;
   padding: 10px 15px;
   cursor: pointer;
   font-weight: 600;
@@ -274,69 +207,10 @@ const removeFilter = (key: any) => {
   background-color: #c0392b;
 }
 
-.active-filters {
-  margin-top: 16px;
+/* Pagination Styling */
+.pagination {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-}
-
-.active-filters-label {
-  color: #b0b0b0;
-  font-size: 0.9rem;
-}
-
-.active-filter-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.filter-tag {
-  background-color: #2196f3;
-  color: white;
-  padding: 6px 10px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  display: flex;
-  align-items: center;
-}
-
-.remove-filter {
-  background: none;
-  border: none;
-  color: white;
-  margin-left: 6px;
-  cursor: pointer;
-  font-size: 1.2rem;
-  line-height: 0.8;
-  padding: 2px;
-}
-
-.remove-filter:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .filters-row {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .filter-item {
-    width: 100%;
-  }
-
-  .filter-actions {
-    width: 100%;
-    margin-top: 5px;
-  }
-
-  .clear-button {
-    width: 100%;
-  }
+  justify-content: center;
+  margin: 20px 0;
 }
 </style>

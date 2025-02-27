@@ -4,9 +4,9 @@ import Characters from "@/components/Characters.vue";
 import Locations from "@/components/Locations.vue";
 import Episodes from "@/components/Episodes.vue";
 
-import { ref } from "vue";
+import { ref, shallowRef } from "vue";
 
-const activeComponent = ref(Characters);
+const activeComponent = shallowRef(Characters);
 function setActiveTab(tab: string) {
   if (tab === "Characters") activeComponent.value = Characters;
   else if (tab === "Locations") activeComponent.value = Locations;
