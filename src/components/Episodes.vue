@@ -3,6 +3,7 @@
 import { ref, watch, onMounted } from "vue";
 import axios from "axios";
 import EpisodeCard from "./EpisodeCard.vue";
+import { NPagination } from "naive-ui";
 
 interface EpisodeInfo {
   count: number;
@@ -39,7 +40,7 @@ watch(page, async () => {
   const res = await axios.get<EpisodeResponse>(
     `https://rickandmortyapi.com/api/episode/?page=${page.value}`
   );
-  episodes.value = response.data;
+  episodes.value = res.data;
 });
 </script>
 
@@ -49,6 +50,13 @@ watch(page, async () => {
       v-for="episode in episodes?.results"
       :key="episode.id"
       :episode="episode"
+    />
+  </div>
+  <div class="pagination">
+    <n-pagination
+      v-model:page="page"
+      :page-count="episodes?.info?.pages || 1"
+      show-quick-jumper
     />
   </div>
 </template>
@@ -61,5 +69,13 @@ watch(page, async () => {
   padding: 1rem 2rem;
   gap: 1rem;
   background-color: rgba(0, 0, 0, 0.5);
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  /* background-color: rgba(0, 0, 0, 0.5);
+  padding: 1rem; */
 }
 </style>

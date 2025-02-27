@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
 import FooterView from "./components/Footer.vue";
+import log1 from "./assets/log1.png";
+import log2 from "./assets/log2.png";
 </script>
 
 <template>
   <header>
     <div class="wrapper">
       <div class="logo">
-        <h1>Your Brand</h1>
+        <img :src="log1" alt="log1" />
       </div>
       <nav>
         <RouterLink to="/">Home</RouterLink>
@@ -27,6 +29,11 @@ header {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+img {
+  width: 70px;
+  height: 45px;
+}
+
 .cards {
   height: 700px;
   background-color: rgb(27, 26, 26);
@@ -36,7 +43,7 @@ header {
 }
 
 .wrapper {
-  max-width: 1200px;
+  padding-right: 1rem;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;

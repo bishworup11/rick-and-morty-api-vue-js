@@ -3,6 +3,7 @@ import LocationCard from "./LocationCard.vue";
 
 import axios from "axios";
 import { watch, ref, onMounted, reactive } from "vue";
+import { NPagination } from "naive-ui";
 
 interface LocationInfo {
   count: number;
@@ -40,7 +41,7 @@ watch(page, async () => {
   const res = await axios.get<LocationResponse>(
     `https://rickandmortyapi.com/api/location/?page=${page.value}`
   );
-  locations.value = response.data;
+  locations.value = res.data;
 });
 </script>
 
@@ -50,6 +51,13 @@ watch(page, async () => {
       v-for="location in locations?.results"
       :key="location.id"
       :location="location"
+    />
+  </div>
+  <div class="pagination">
+    <n-pagination
+      v-model:page="page"
+      :page-count="locations?.info?.pages || 1"
+      show-quick-jumper
     />
   </div>
 </template>
@@ -62,5 +70,14 @@ watch(page, async () => {
   padding: 1rem 2rem;
   gap: 1rem;
   background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Pagination Styling */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  /* background-color: rgba(0, 0, 0, 0.5);
+  padding: 1rem; */
 }
 </style>

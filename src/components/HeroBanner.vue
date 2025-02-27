@@ -16,7 +16,9 @@ function setActiveTab(tab) {
   <section class="hero-wrapper">
     <div class="hero-content">
       <h1 class="hero-title">Rick and Morty</h1>
-      <p class="hero-subtitle">Your compelling tagline goes here</p>
+      <p class="hero-subtitle">
+        Explore the multiverse with your favorite characters!
+      </p>
       <div class="hero-cta">
         <button
           :class="[
