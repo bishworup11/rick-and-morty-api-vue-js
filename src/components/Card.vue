@@ -1,9 +1,7 @@
 <script setup>
-    import {defineProps} from "vue"
+import { defineProps } from "vue";
 
-    const {character } = defineProps([
-       'character'
-    ])
+const { character } = defineProps(["character"]);
 </script>
 <template>
   <div class="character-card">
@@ -11,48 +9,49 @@
       <span class="status-indicator"></span>
       {{ character.status }}
     </div>
-    
+
     <div class="character-image">
-      <img :src="character.image" :alt="character.name">
+      <img :src="character.image" :alt="character.name" />
     </div>
-    
+
     <div class="character-info">
       <h2 class="character-name">{{ character.name }}</h2>
-      
+
       <div class="character-details">
         <div class="detail-item">
           <span class="detail-label">Species:</span>
           <span class="detail-value">{{ character.species }}</span>
         </div>
-        
+
         <div class="detail-item" v-if="character.type">
           <span class="detail-label">Type:</span>
-          <span class="detail-value">{{ character.type || 'Unknown' }}</span>
+          <span class="detail-value">{{ character.type || "Unknown" }}</span>
         </div>
-        
+
         <div class="detail-item">
           <span class="detail-label">Gender:</span>
           <span class="detail-value">{{ character.gender }}</span>
         </div>
-        
+
         <div class="detail-item">
           <span class="detail-label">Origin:</span>
           <span class="detail-value">{{ character.origin.name }}</span>
         </div>
-        
-        <div class="detail-item">
+
+        <div class="detail-item character-location">
           <span class="detail-label">Location:</span>
           <span class="detail-value">{{ character.location.name }}</span>
         </div>
       </div>
-      
+
       <div class="character-episodes">
         <h3 class="episodes-title">Episodes</h3>
         <div class="episodes-count">
-          <span class="episode-badge">{{ character.episode.length }}</span> appearances
+          <span class="episode-badge">{{ character.episode.length }}</span>
+          appearances
         </div>
       </div>
-      
+
       <div class="character-actions">
         <button class="view-episodes-btn">View Episodes</button>
         <button class="view-profile-btn">Full Profile</button>
@@ -60,7 +59,6 @@
     </div>
   </div>
 </template>
-
 
 <style scoped>
 .character-card {
@@ -135,7 +133,7 @@
 
 .character-info {
   padding: 1.5rem;
- /* background-color: #244e6b; */
+  /* background-color: #244e6b; */
   width: 55%;
 }
 
@@ -242,9 +240,36 @@
   .character-details {
     grid-template-columns: 1fr;
   }
-  
+
   .character-actions {
     flex-direction: column;
+  }
+
+  .character-card {
+    flex-direction: column;
+    height: 630px;
+  }
+
+  .character-image {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    margin-bottom: -1rem;
+  }
+
+  .character-info {
+    width: 100%;
+    height: 70%;
+  }
+
+  .character-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+  .character-details div:nth-child(5) {
+    grid-column: span 2;
   }
 }
 </style>
