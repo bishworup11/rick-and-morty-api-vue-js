@@ -58,7 +58,7 @@ const characters: Module<CharactersState, RootState> = {
 
         commit("setCharacters", response.data.results);
         commit("setInfo", response.data.info);
-        console.log(response.data);
+        //console.log(response.data);
       } catch (error) {
         console.error("Error fetching characters:", error);
         commit("setCharacters", []);
@@ -129,7 +129,5 @@ const characters: Module<CharactersState, RootState> = {
     },
   },
 };
-
-const state = characters.state;
 
 export default characters;

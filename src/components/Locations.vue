@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import LocationCard from "./LocationCard.vue";
-import axios from "axios";
-import { watch, ref, onMounted, reactive, computed } from "vue";
+import { onMounted, computed } from "vue";
 import { NPagination } from "naive-ui";
 import store, { useStore } from "../store";
 

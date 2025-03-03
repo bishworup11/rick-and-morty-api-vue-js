@@ -1,86 +1,8 @@
 <script setup lang="ts">
 import Card from "@/components/Card.vue";
-import Test from "./Test.vue";
-import { watch, ref, reactive, computed, onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import { NPagination } from "naive-ui";
 import store, { useStore } from "../store";
-
-// interface Character {
-//   id: number;
-//   name: string;
-//   status: string;
-//   species: string;
-//   type: string;
-//   gender: string;
-//   origin: { name: string; url: string };
-//   location: { name: string; url: string };
-//   image: string;
-//   episode: string[];
-//   url: string;
-//   created: string;
-// }
-
-// const characters = ref<Character[]>([]);
-// const info = ref<{ pages: number } | null>(null);
-// const page = ref(1);
-
-// const filters = reactive({
-//   name: "",
-//   status: "",
-//   species: "",
-//   type: "",
-//   gender: "",
-// });
-
-// // Computed property to construct API query parameters
-// const queryParams = computed(() => {
-//   const params = new URLSearchParams();
-//   // params.append("page", page.value.toString());
-//   if (filters.name) params.append("name", filters.name);
-//   if (filters.status) params.append("status", filters.status);
-//   if (filters.species) params.append("species", filters.species);
-//   if (filters.type) params.append("type", filters.type);
-//   if (filters.gender) params.append("gender", filters.gender);
-//   return params.toString();
-// });
-
-// // Function to fetch characters based on query parameters
-// const fetchCharacters = async () => {
-//   try {
-//     const response = await axios.get<{
-//       info: { pages: number };
-//       results: Character[];
-//     }>(
-//       `https://rickandmortyapi.com/api/character/?page=${page.value}${
-//         queryParams.value ? "&" + queryParams.value : ""
-//       }`
-//     );
-//     characters.value = response.data.results;
-//     info.value = response.data.info;
-//   } catch (error) {
-//     console.error("Error fetching characters:", error);
-//     characters.value = [];
-//   }
-// };
-// watch(filters, () => {
-//   page.value = 1;
-// });
-
-// // Watchers to trigger API call when filters or page changes
-
-// watch([queryParams, page], fetchCharacters, { immediate: true });
-
-// // Function to reset filters and go back to page 1
-// const clearFilters = () => {
-//   Object.assign(filters, {
-//     name: "",
-//     status: "",
-//     species: "",
-//     type: "",
-//     gender: "",
-//   });
-//   page.value = 1;
-// };
 
 const characters = computed(() => store.getters["characters/allCharacters"]);
 const isLoading = computed(() => store.getters["characters/isLoading"]);
@@ -100,7 +22,9 @@ const updateFilter = (key: string, value: string) => {
   store.dispatch("characters/setFilter", { key, value });
 };
 
-const clearFilters = () => {store.dispatch("characters/clearFilters"); };
+const clearFilters = () => {
+  store.dispatch("characters/clearFilters");
+};
 
 onMounted(() => {
   fetchCharacters();

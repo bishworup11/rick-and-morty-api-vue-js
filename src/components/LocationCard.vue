@@ -1,3 +1,30 @@
+<script setup lang="ts">
+interface Location {
+  id: number;
+  name: string;
+  type: string;
+  dimension: string;
+  residents: string[];
+  url: string;
+  created: string;
+}
+
+const props = defineProps<{
+  location: Location;
+}>();
+
+const emit = defineEmits(["view-details"]);
+
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString();
+};
+
+const viewDetails = () => {
+  emit("view-details", props.location.id);
+};
+</script>
+
 <template>
   <div class="location-card">
     <div class="location-header">
@@ -30,33 +57,6 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-interface Location {
-  id: number;
-  name: string;
-  type: string;
-  dimension: string;
-  residents: string[];
-  url: string;
-  created: string;
-}
-
-const props = defineProps<{
-  location: Location;
-}>();
-
-const emit = defineEmits(["view-details"]);
-
-const formatDate = (dateString: string) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString();
-};
-
-const viewDetails = () => {
-  emit("view-details", props.location.id);
-};
-</script>
 
 <style scoped>
 .location-card {
