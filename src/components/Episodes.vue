@@ -1,62 +1,41 @@
-// EpisodeList.vue
 <script setup lang="ts">
-import { ref, watch, onMounted } from "vue";
-import axios from "axios";
 import EpisodeCard from "./EpisodeCard.vue";
+import { computed, onMounted } from "vue";
 import { NPagination } from "naive-ui";
+import store from "../store";
 
-interface EpisodeInfo {
-  count: number;
-  pages: number;
-  next: string | null;
-  prev: string | null;
+const episodes = computed(() => store.getters["episodes/allEpisodes"]);
+const page = computed(() => store.getters["episodes/getCurrentPage"]);
+const info = computed(() => store.getters["episodes/getInfo"]);
+const isLoading = computed(() => store.getters["episodes/isLoading"]);
+
+function fetchEpisodes() {
+  store.dispatch("episodes/fetchEpisodes");
 }
 
-interface Episode {
-  id: number;
-  name: string;
-  air_date: string;
-  episode: string;
-  characters: string[];
-  url: string;
-  created: string;
+function handlePageChange(newPage: number) {
+  store.dispatch("episodes/setPage", newPage);
 }
 
-interface EpisodeResponse {
-  info: EpisodeInfo;
-  results: Episode[];
-}
-
-const episodes = ref<EpisodeResponse | null>(null);
-const page = ref(1);
-
-const response = await axios.get<EpisodeResponse>(
-  "https://rickandmortyapi.com/api/episode"
-);
-console.log(response);
-episodes.value = response.data;
-
-watch(page, async () => {
-  const res = await axios.get<EpisodeResponse>(
-    `https://rickandmortyapi.com/api/episode/?page=${page.value}`
-  );
-  episodes.value = res.data;
+onMounted(() => {
+  fetchEpisodes();
 });
 </script>
 
 <template>
   <div class="container">
     <EpisodeCard
-      v-for="episode in episodes?.results"
+      v-for="episode in episodes"
       :key="episode.id"
       :episode="episode"
     />
   </div>
   <div class="pagination">
     <n-pagination
-      v-model:page="page"
-      :page-count="episodes?.info?.pages || 1"
+      :page="page"
+      :page-count="info?.pages || 1"
       show-quick-jumper
+      @update:page="handlePageChange"
     />
   </div>
 </template>
@@ -75,7 +54,5 @@ watch(page, async () => {
   display: flex;
   justify-content: center;
   margin: 20px 0;
-  /* background-color: rgba(0, 0, 0, 0.5);
-  padding: 1rem; */
 }
 </style>

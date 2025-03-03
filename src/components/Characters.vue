@@ -1,87 +1,110 @@
 <script setup lang="ts">
 import Card from "@/components/Card.vue";
-import HeroBanner from "@/components/HeroBanner.vue";
-
-import axios from "axios";
+import Test from "./Test.vue";
 import { watch, ref, reactive, computed, onMounted } from "vue";
 import { NPagination } from "naive-ui";
+import store, { useStore } from "../store";
 
-interface Character {
-  id: number;
-  name: string;
-  status: string;
-  species: string;
-  type: string;
-  gender: string;
-  origin: { name: string; url: string };
-  location: { name: string; url: string };
-  image: string;
-  episode: string[];
-  url: string;
-  created: string;
+// interface Character {
+//   id: number;
+//   name: string;
+//   status: string;
+//   species: string;
+//   type: string;
+//   gender: string;
+//   origin: { name: string; url: string };
+//   location: { name: string; url: string };
+//   image: string;
+//   episode: string[];
+//   url: string;
+//   created: string;
+// }
+
+// const characters = ref<Character[]>([]);
+// const info = ref<{ pages: number } | null>(null);
+// const page = ref(1);
+
+// const filters = reactive({
+//   name: "",
+//   status: "",
+//   species: "",
+//   type: "",
+//   gender: "",
+// });
+
+// // Computed property to construct API query parameters
+// const queryParams = computed(() => {
+//   const params = new URLSearchParams();
+//   // params.append("page", page.value.toString());
+//   if (filters.name) params.append("name", filters.name);
+//   if (filters.status) params.append("status", filters.status);
+//   if (filters.species) params.append("species", filters.species);
+//   if (filters.type) params.append("type", filters.type);
+//   if (filters.gender) params.append("gender", filters.gender);
+//   return params.toString();
+// });
+
+// // Function to fetch characters based on query parameters
+// const fetchCharacters = async () => {
+//   try {
+//     const response = await axios.get<{
+//       info: { pages: number };
+//       results: Character[];
+//     }>(
+//       `https://rickandmortyapi.com/api/character/?page=${page.value}${
+//         queryParams.value ? "&" + queryParams.value : ""
+//       }`
+//     );
+//     characters.value = response.data.results;
+//     info.value = response.data.info;
+//   } catch (error) {
+//     console.error("Error fetching characters:", error);
+//     characters.value = [];
+//   }
+// };
+// watch(filters, () => {
+//   page.value = 1;
+// });
+
+// // Watchers to trigger API call when filters or page changes
+
+// watch([queryParams, page], fetchCharacters, { immediate: true });
+
+// // Function to reset filters and go back to page 1
+// const clearFilters = () => {
+//   Object.assign(filters, {
+//     name: "",
+//     status: "",
+//     species: "",
+//     type: "",
+//     gender: "",
+//   });
+//   page.value = 1;
+// };
+
+const characters = computed(() => store.getters["characters/allCharacters"]);
+const isLoading = computed(() => store.getters["characters/isLoading"]);
+const info = computed(() => store.getters["characters/getInfo"]);
+const page = computed(() => store.getters["characters/getCurrentPage"]);
+const filters = computed(() => store.getters["characters/getFilters"]);
+function fetchCharacters() {
+  store.dispatch("characters/fetchCharacters");
 }
 
-const characters = ref<Character[]>([]);
-const info = ref<{ pages: number } | null>(null);
-const page = ref(1);
-
-const filters = reactive({
-  name: "",
-  status: "",
-  species: "",
-  type: "",
-  gender: "",
-});
-
-// Computed property to construct API query parameters
-const queryParams = computed(() => {
-  const params = new URLSearchParams();
-  // params.append("page", page.value.toString());
-  if (filters.name) params.append("name", filters.name);
-  if (filters.status) params.append("status", filters.status);
-  if (filters.species) params.append("species", filters.species);
-  if (filters.type) params.append("type", filters.type);
-  if (filters.gender) params.append("gender", filters.gender);
-  return params.toString();
-});
-
-// Function to fetch characters based on query parameters
-const fetchCharacters = async () => {
-  try {
-    const response = await axios.get<{
-      info: { pages: number };
-      results: Character[];
-    }>(
-      `https://rickandmortyapi.com/api/character/?page=${page.value}${
-        queryParams.value ? "&" + queryParams.value : ""
-      }`
-    );
-    characters.value = response.data.results;
-    info.value = response.data.info;
-  } catch (error) {
-    console.error("Error fetching characters:", error);
-    characters.value = [];
-  }
+const handlePageChange = (newPage: number) => {
+  store.dispatch("characters/setPage", newPage);
 };
-watch(filters, () => {
-  page.value = 1;
-});
 
-// Watchers to trigger API call when filters or page changes
-
-watch([queryParams, page], fetchCharacters, { immediate: true });
-
-// Function to reset filters and go back to page 1
-const clearFilters = () => {
-  Object.assign(filters, {
-    name: "",
-    status: "",
-    species: "",
-    type: "",
-    gender: "",
-  });
-  page.value = 1;
+const updateFilter = (key: string, value: string) => {
+  //console.log(key, value);
+  store.dispatch("characters/setFilter", { key, value });
 };
+
+const clearFilters = () => {store.dispatch("characters/clearFilters"); };
+
+onMounted(() => {
+  fetchCharacters();
+});
 </script>
 
 <template>
@@ -91,7 +114,8 @@ const clearFilters = () => {
       <label for="name">Name</label>
       <input
         id="name"
-        v-model="filters.name"
+        :value="filters.name"
+        @input="updateFilter('name', ($event.target as HTMLInputElement).value)"
         type="text"
         placeholder="Filter by name"
       />
@@ -100,7 +124,13 @@ const clearFilters = () => {
     <!-- Status filter -->
     <div class="filter-item">
       <label for="status">Status</label>
-      <select id="status" v-model="filters.status">
+      <select
+        id="status"
+        :value="filters.status"
+        @input="
+          updateFilter('status', ($event.target as HTMLSelectElement).value)
+        "
+      >
         <option value="">Any</option>
         <option value="alive">Alive</option>
         <option value="dead">Dead</option>
@@ -113,7 +143,10 @@ const clearFilters = () => {
       <label for="species">Species</label>
       <input
         id="species"
-        v-model="filters.species"
+        :value="filters.species"
+        @input="
+          updateFilter('species', ($event.target as HTMLSelectElement).value)
+        "
         type="text"
         placeholder="Filter by species"
       />
@@ -122,7 +155,13 @@ const clearFilters = () => {
     <!-- Gender filter -->
     <div class="filter-item">
       <label for="gender">Gender</label>
-      <select id="gender" v-model="filters.gender">
+      <select
+        id="gender"
+        :value="filters.gender"
+        @input="
+          updateFilter('gender', ($event.target as HTMLSelectElement).value)
+        "
+      >
         <option value="">Any</option>
         <option value="female">Female</option>
         <option value="male">Male</option>
@@ -148,9 +187,10 @@ const clearFilters = () => {
   <!-- Naive UI Pagination -->
   <div class="pagination">
     <n-pagination
-      v-model:page="page"
+      :page="page"
       :page-count="info?.pages || 1"
       show-quick-jumper
+      @update:page="handlePageChange"
     />
   </div>
 </template>

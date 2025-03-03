@@ -1,76 +1,32 @@
 <script setup lang="ts">
-import Card from "@/components/Card.vue";
-import HeroBanner from "@/components/HeroBanner.vue";
+import { computed, onMounted } from "vue";
+import { useStore } from "../store";
 
-import axios from "axios";
-import { watch, ref, onMounted, reactive } from "vue";
+const store = useStore();
 
-interface Character {
-  id: number;
-  name: string;
-  status: string;
-  species: string;
-  type: string;
-  gender: string;
-  origin: {
-    name: string;
-    url: string;
-  };
-  location: {
-    name: string;
-    url: string;
-  };
-  image: string;
-  episode: string[]; // Array of episode URLs
-  url: string;
-  created: string; // ISO date string
+const characters = computed(() => store.getters["characters/allCharacters"]);
+const isLoading = computed(() => store.getters["characters/isLoading"]);
+
+function fetchCharacters() {
+  store.dispatch("characters/fetchCharacters");
 }
 
-const characters = ref<Character[] | null>(null);
-
-const page = ref(1);
-
-// const response = await axios.get(
-//   "https://www.breakingbadapi.com/api/characters?limit=8"
-// );
-// characters.value = response.data;
-
-const response = await axios.get<{ results: Character[] }>(
-  "https://rickandmortyapi.com/api/character"
-);
-console.log(response);
-characters.value = response.data.results;
-console.log(characters.value);
-
-watch(page, async () => {
-  const res = await axios.get<{ results: Character[] }>(
-    `https://rickandmortyapi.com/api/character/?page=${page.value}`
-  );
-  characters.value = res.data.results;
+console.log(characters);
+onMounted(() => {
+  fetchCharacters();
 });
 </script>
 
 <template>
   <div>
-    <HeroBanner />
-
-    <div class="container">
-      <Card
-        v-for="character in characters"
-        :key="character.id"
-        :character="character"
-      />
+    <div v-if="isLoading">Loading...</div>
+    <div v-else>
+      <div v-for="character in characters" :key="character.id">
+        {{ character.name }}
+      </div>
     </div>
   </div>
 </template>
 
-<style scoped>
-.container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  padding: 1rem 2rem;
-  gap: 1rem;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-</style>
+
+
