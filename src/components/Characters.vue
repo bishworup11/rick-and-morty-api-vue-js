@@ -36,7 +36,7 @@ const filters = reactive({
 // Computed property to construct API query parameters
 const queryParams = computed(() => {
   const params = new URLSearchParams();
-  params.append("page", page.value.toString());
+  // params.append("page", page.value.toString());
   if (filters.name) params.append("name", filters.name);
   if (filters.status) params.append("status", filters.status);
   if (filters.species) params.append("species", filters.species);
@@ -51,7 +51,11 @@ const fetchCharacters = async () => {
     const response = await axios.get<{
       info: { pages: number };
       results: Character[];
-    }>(`https://rickandmortyapi.com/api/character/?${queryParams.value}`);
+    }>(
+      `https://rickandmortyapi.com/api/character/?page=${page.value}${
+        queryParams.value ? "&" + queryParams.value : ""
+      }`
+    );
     characters.value = response.data.results;
     info.value = response.data.info;
   } catch (error) {
@@ -59,8 +63,12 @@ const fetchCharacters = async () => {
     characters.value = [];
   }
 };
+watch(filters, () => {
+  page.value = 1;
+});
 
 // Watchers to trigger API call when filters or page changes
+
 watch([queryParams, page], fetchCharacters, { immediate: true });
 
 // Function to reset filters and go back to page 1
