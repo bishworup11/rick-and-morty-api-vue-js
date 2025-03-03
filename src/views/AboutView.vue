@@ -159,6 +159,7 @@ import dev from "../assets/dev.png";
   color: #e4e4e4;
   min-height: 100vh;
   padding: 2rem 1rem;
+  margin-bottom: -2rem;
 }
 
 .content-wrapper {
