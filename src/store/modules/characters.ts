@@ -50,7 +50,7 @@ const characters: Module<CharactersState, RootState> = {
 
       try {
         const params = getters.getQueryParams;
-        const page = state.page;
+        const page = getters.getCurrentPage;
 
         const response = await axios.get<{ info: Info; results: Character[] }>(
           `https://rickandmortyapi.com/api/character/?page=${page}&${params.toString()}`

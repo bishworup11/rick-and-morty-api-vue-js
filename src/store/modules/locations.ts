@@ -1,7 +1,6 @@
 import axios from "axios";
 import type { Module } from "vuex";
 import type { LocationState, Location, RootState, Info } from "../types";
-import { error } from "naive-ui/es/_utils/naive/warn";
 
 const locations: Module<LocationState, RootState> = {
   namespaced: true,
@@ -20,11 +19,11 @@ const locations: Module<LocationState, RootState> = {
     getError: (state: LocationState) => state.error,
   },
   actions: {
-    async fetchLocations({ commit }: any) {
+    async fetchLocations({ commit, getters }: any) {
       commit("setLoading", true);
       commit("setError", null);
       try {
-        const page = locations.state.page;
+        const page = getters.getCurrentPage;
 
         const response = await axios.get<{ info: Info; results: Location[] }>(
           `https://rickandmortyapi.com/api/location/?page=${page}`

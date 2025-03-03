@@ -1,9 +1,6 @@
-import { Store } from 'vuex';
-import { RootState } from './store/types';
-
-declare module '@vue/runtime-core' {
-  // provide typings for `this.$store`
-  interface ComponentCustomProperties {
-    $store: Store<RootState>;
-  }
+declare module "vuex" {
+  export * from "vuex/types/index.d.ts";
+  export * from "vuex/types/helpers.d.ts";
+  export * from "vuex/types/logger.d.ts";
+  export * from "vuex/types/vue.d.ts";
 }
