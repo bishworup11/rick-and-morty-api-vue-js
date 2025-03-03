@@ -1,3 +1,7 @@
+<script setup>
+import dev from "../assets/dev.png";
+</script>
+
 <template>
   <div class="about-container">
     <div class="content-wrapper">
@@ -33,11 +37,11 @@
         <div class="developer-info">
           <div class="avatar">
             <!-- Using a public placeholder service instead -->
-            <img src="https://via.placeholder.com/150" alt="Developer Avatar" />
+            <img :src="dev" alt="Developer Avatar" />
           </div>
           <div class="bio">
             <p>
-              s I'm a passionate front-end developer with a love for Vue.js and
+              I'm a passionate front-end developer with a love for Vue.js and
               creative web applications. My focus is on building intuitive,
               responsive user interfaces that provide exceptional user
               experiences.
@@ -166,6 +170,9 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
+img {
+  width: 15rem;
+}
 section {
   margin-bottom: 3rem;
 }
