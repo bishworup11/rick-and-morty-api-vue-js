@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
 import { computed, onMounted } from "vue";
+import { NNotificationProvider } from "naive-ui";
 import { useStore } from "@/store";
 import FooterView from "@/components/Footer.vue";
 import log1 from "@/assets/log1.png";
@@ -18,22 +19,24 @@ onMounted(() => {
 </script>
 
 <template>
-  <header v-if="isAuthenticated">
-    <div class="wrapper">
-      <div class="logo">
-        <img :src="log1" alt="log1" />
+  <n-notification-provider>
+    <header v-if="isAuthenticated">
+      <div class="wrapper">
+        <div class="logo">
+          <img :src="log1" alt="log1" />
+        </div>
+        <nav>
+          <RouterLink to="/">Home</RouterLink>
+          <RouterLink to="/about">About</RouterLink>
+          <button @click="logout">Logout</button>
+        </nav>
       </div>
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-        <button @click="logout">Logout</button>
-      </nav>
-    </div>
-  </header>
+    </header>
 
-  <RouterView />
+    <RouterView />
 
-  <FooterView v-if="isAuthenticated" />
+    <FooterView v-if="isAuthenticated" />
+  </n-notification-provider>
 </template>
 
 <style scoped>

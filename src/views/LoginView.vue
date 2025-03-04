@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "@/store";
+import { useNotification } from "naive-ui";
 
 const store = useStore();
 const router = useRouter();
+const notification = useNotification();
 
 const username = ref("");
 const password = ref("");
@@ -21,6 +23,26 @@ const login = async () => {
     error.value = "Invalid username or password";
   }
 };
+
+// Show notification after 5 seconds
+let timeoutId: number | null = null;
+
+onMounted(() => {
+  timeoutId = setTimeout(() => {
+    notification.create({
+      title: "Still there?",
+      content: "Username: emilys, Password: emilyspass  ",
+      //duration: 5000,
+    });
+  }, 5000);
+});
+
+//Clear the timeout when the component is unmounted
+onUnmounted(() => {
+  if (timeoutId) {
+    clearTimeout(timeoutId);
+  }
+});
 </script>
 
 <template>
@@ -56,7 +78,7 @@ const login = async () => {
 <style scoped>
 .login-container {
   max-width: 400px;
-  margin: 2rem auto;
+  margin: 10% auto;
   padding: 2rem;
   background-color: #ffffff;
   border-radius: 8px;
