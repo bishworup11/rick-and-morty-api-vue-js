@@ -1,25 +1,42 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
-import FooterView from "./components/Footer.vue";
-import log1 from "./assets/log1.png";
-import log2 from "./assets/log2.png";
+import { computed, onMounted } from "vue";
+import { NNotificationProvider } from "naive-ui";
+import { useStore } from "@/store";
+import FooterView from "@/components/Footer.vue";
+import log1 from "@/assets/log1.png";
+
+const store = useStore();
+const isAuthenticated = computed(() => store.getters["auth/isAuthenticated"]);
+
+const logout = () => {
+  store.dispatch("auth/logout");
+};
+
+onMounted(() => {
+  store.dispatch("auth/initializeAuth");
+});
 </script>
 
 <template>
-  <header>
-    <div class="wrapper">
-      <div class="logo">
-        <img :src="log1" alt="log1" />
+  <n-notification-provider>
+    <header v-if="isAuthenticated">
+      <div class="wrapper">
+        <div class="logo">
+          <img :src="log1" alt="log1" />
+        </div>
+        <nav>
+          <RouterLink to="/">Home</RouterLink>
+          <RouterLink to="/about">About</RouterLink>
+          <button @click="logout">Logout</button>
+        </nav>
       </div>
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-  <RouterView />
+    </header>
 
-  <FooterView />
+    <RouterView />
+
+    <FooterView v-if="isAuthenticated" />
+  </n-notification-provider>
 </template>
 
 <style scoped>
@@ -32,14 +49,6 @@ header {
 img {
   width: 70px;
   height: 45px;
-}
-
-.cards {
-  height: 700px;
-  background-color: rgb(27, 26, 26);
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .wrapper {
@@ -60,6 +69,7 @@ img {
 nav {
   display: flex;
   gap: 1.5rem;
+  align-items: center;
 }
 
 nav a {
@@ -87,6 +97,19 @@ nav a.router-link-active::after {
   width: 100%;
   height: 2px;
   background-color: #41b883;
+}
+
+button {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+button:hover {
+  color: #ffffff;
 }
 
 @media (max-width: 768px) {
