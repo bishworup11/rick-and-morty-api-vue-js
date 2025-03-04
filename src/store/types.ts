@@ -76,9 +76,18 @@ export interface EpisodeState {
   loading: boolean;
   error: string | null;
 }
+// for auth
+
+export interface AuthState {
+  user: any | null;
+  loading: boolean;
+  error: string | null;
+}
+
 // Root state
 export interface RootState {
   characters: CharactersState;
   locations: LocationState;
   episodes: Episode[];
+  auth: AuthState;
 }

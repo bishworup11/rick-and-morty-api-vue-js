@@ -3,6 +3,7 @@ import { createStore, Store, useStore as baseUseStore } from "vuex";
 import characters from "./modules/characters";
 import locations from "./modules/locations";
 import episodes from "./modules/episodes";
+import auth from "./modules/auth";
 
 import type { InjectionKey } from "vue";
 import type { RootState } from "./types";
@@ -15,6 +16,7 @@ export const store = createStore<RootState>({
     characters,
     locations,
     episodes,
+    auth,
   },
 });
 
