@@ -3,6 +3,7 @@ import axios from "axios";
 import type { Module } from "vuex";
 import type { RootState } from "../types";
 import router from "@/router";
+import { setSession, getSession, clearSession } from "@/helpers/encrypt";
 
 interface AuthState {
   user: any | null;
@@ -47,7 +48,8 @@ const auth: Module<AuthState, RootState> = {
         );
 
         commit("setUser", response.data);
-        localStorage.setItem("userSession", JSON.stringify(response.data));
+        //localStorage.setItem("userSession", JSON.stringify(response.data));
+        setSession(response.data);
         router.push("/");
       } catch (error) {
         console.error("Login failed:", error);
@@ -59,14 +61,15 @@ const auth: Module<AuthState, RootState> = {
 
     logout({ commit }) {
       commit("setUser", null);
-      localStorage.removeItem("userSession");
+      //localStorage.removeItem("userSession");
+      clearSession();
       router.push("/login");
     },
 
     initializeAuth({ commit }) {
-      const userSession = localStorage.getItem("userSession");
+      const userSession = getSession();
       if (userSession) {
-        commit("setUser", JSON.parse(userSession));
+        commit("setUser", userSession);
       }
     },
   },
