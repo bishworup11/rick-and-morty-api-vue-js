@@ -25,7 +25,7 @@ const login = async () => {
 };
 
 // Show notification after 5 seconds
-let timeoutId: number | null = null;
+let timeoutId: any;
 
 onMounted(() => {
   timeoutId = setTimeout(() => {
