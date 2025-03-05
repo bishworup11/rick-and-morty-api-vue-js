@@ -4,6 +4,7 @@ type EncryptAbleData = string | number | boolean | object | null | undefined;
 
 //const APP_SECRET = "secret@123";
 const APP_SECRET = import.meta.env.VITE_APP_SECRET;
+console.log("APP_SECRET:", import.meta.env.VITE_APP_SECRET);
 
 if (!APP_SECRET) {
   throw new Error("APP_SECRET is not defined in .env file");
