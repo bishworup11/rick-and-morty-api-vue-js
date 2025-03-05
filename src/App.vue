@@ -26,7 +26,7 @@ onMounted(() => {
           <img :src="log1" alt="log1" />
         </div>
         <nav>
-          <RouterLink to="/">Home</RouterLink>
+          <RouterLink to="/characters">Home</RouterLink>
           <RouterLink to="/about">About</RouterLink>
           <button @click="logout">Logout</button>
         </nav>

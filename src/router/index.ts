@@ -6,8 +6,28 @@ import store from "@/store";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    { path: "/", redirect: "/characters" },
     {
       path: "/",
+      component: () => import("../views/HomeView.vue"),
+      children: [
+        {
+          path: "characters",
+          component: () => import("../components/Characters.vue"),
+        },
+        {
+          path: "locations",
+          component: () => import("../components/Locations.vue"),
+        },
+        {
+          path: "episodes",
+          component: () => import("../components/Episodes.vue"),
+        },
+      ],
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/characters",
       name: "home",
       component: HomeView,
       meta: { requiresAuth: true },

@@ -1,14 +1,12 @@
 <script setup>
-import { ref, defineEmits } from "vue";
+import { ref, defineEmits, defineProps } from "vue";
 
-const activeButton = ref("Characters");
+const { activeButton } = defineProps(["activeButton"]);
 
 const emit = defineEmits(["setActiveTab"]);
 
 function setActiveTab(tab) {
-  activeButton.value = tab;
   emit("setActiveTab", tab);
-  // console.log(activeButton.value);
 }
 </script>
 
