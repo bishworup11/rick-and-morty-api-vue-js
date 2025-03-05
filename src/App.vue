@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { NNotificationProvider } from "naive-ui";
 import { useStore } from "@/store";
 import FooterView from "@/components/Footer.vue";
@@ -8,6 +8,7 @@ import log1 from "@/assets/log1.png";
 
 const store = useStore();
 const isAuthenticated = computed(() => store.getters["auth/isAuthenticated"]);
+const isHome = ref(true);
 
 const logout = () => {
   store.dispatch("auth/logout");
@@ -26,8 +27,18 @@ onMounted(() => {
           <img :src="log1" alt="log1" />
         </div>
         <nav>
-          <RouterLink to="/characters">Home</RouterLink>
-          <RouterLink to="/about">About</RouterLink>
+          <RouterLink
+            to="/characters"
+            @click="isHome = true"
+            :class="{ 'active-button': isHome }"
+            >Home</RouterLink
+          >
+          <RouterLink
+            to="/about"
+            @click="isHome = false"
+            :class="{ 'active-button': !isHome }"
+            >About</RouterLink
+          >
           <button @click="logout">Logout</button>
         </nav>
       </div>
@@ -89,7 +100,7 @@ nav a.router-link-active {
   color: #ffffff;
 }
 
-nav a.router-link-active::after {
+/* nav a.router-link-active::after {
   content: "";
   position: absolute;
   bottom: 0;
@@ -97,6 +108,13 @@ nav a.router-link-active::after {
   width: 100%;
   height: 2px;
   background-color: #41b883;
+} */
+
+.active-button {
+  background-color: #41b883;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  color: #ffffff;
 }
 
 button {
