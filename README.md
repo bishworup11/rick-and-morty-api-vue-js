@@ -1,33 +1,71 @@
-# rick-and-morty-api-vue-js
+# **Rick and Morty API - Vue.js**  
 
-This template should help get you started developing with Vue 3 in Vite.
+This project is built using **Vue.js 3**, powered by **Vite**, and utilizes the **Rick and Morty API** to display characters, locations, and episodes from the show.  
 
-## Recommended IDE Setup
+## **📌 Features**  
+✅ Fetch and display Rick and Morty characters, locations, and episodes.  
+✅ Vue Router for navigation between different pages.  
+✅ State management using Vuex.  
+✅ API calls handled with Axios.  
+✅ UI components powered by Naive UI.  
+✅ Authentication with token-based auth and Navigation Guards.  
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+---
 
-## Type Support for `.vue` Imports in TS
+## **🛠 Technologies Used**  
+- **Vue.js 3** – Progressive JavaScript framework.  
+- **Vite** – Fast build tool for modern web projects.  
+- **TypeScript** – Strongly typed JavaScript alternative.  
+- **Vuex** – State management pattern and library.  
+- **Vue Router** – Official router for Vue.js applications.  
+- **Naive UI** – Modern UI components for Vue 3.  
+- **Axios** – HTTP client for making API requests.  
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+---
 
-## Customize configuration
+## **💻 Recommended IDE Setup**  
+- [VS Code](https://code.visualstudio.com/)  
+  
+---
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+## **🚀 Project Setup**  
 
-## Project Setup
+### **1️⃣ Clone the Repository**  
+```sh
+git clone https://github.com/bishworup11/rick-and-morty-api-vue-js.git
+cd rick-and-morty-api-vue-js
+```
 
+### **2️⃣ Install Dependencies**  
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### **3️⃣ Setup Environment Variables**  
+Create a `.env` file in the root directory and add:  
+```sh
+VITE_APP_SECRET=secret@123
+```
+> **Note:** Never expose sensitive API keys in the frontend.
 
+### **4️⃣ Run the Development Server**  
 ```sh
 npm run dev
 ```
+This will start the application locally at `http://localhost:5173/`.
 
-### Type-Check, Compile and Minify for Production
-
+### **5️⃣ Build for Production**  
 ```sh
 npm run build
 ```
+This generates an optimized production build in the `dist/` folder.
+
+---
+
+
+## **📄 API Reference**  
+
+- **Rick and Morty API** – [rickandmortyapi.com](https://rickandmortyapi.com)  
+- **Authentication API** – [dummyjson.com/auth](https://dummyjson.com/docs/auth)  
+
+---

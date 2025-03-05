@@ -32,81 +32,77 @@ onMounted(() => {
 </script>
 
 <template>
+  <div class="filters-row">
+    <!-- Name filter -->
+    <div class="filter-item">
+      <label for="name">Name</label>
+      <input
+        id="name"
+        :value="filters.name"
+        @input="updateFilter('name', ($event.target as HTMLInputElement).value)"
+        type="text"
+        placeholder="Filter by name"
+      />
+    </div>
+
+    <!-- Status filter -->
+    <div class="filter-item">
+      <label for="status">Status</label>
+      <select
+        id="status"
+        :value="filters.status"
+        @input="
+          updateFilter('status', ($event.target as HTMLSelectElement).value)
+        "
+      >
+        <option value="">Any</option>
+        <option value="alive">Alive</option>
+        <option value="dead">Dead</option>
+        <option value="unknown">Unknown</option>
+      </select>
+    </div>
+
+    <!-- Species filter -->
+    <div class="filter-item">
+      <label for="species">Species</label>
+      <input
+        id="species"
+        :value="filters.species"
+        @input="
+          updateFilter('species', ($event.target as HTMLSelectElement).value)
+        "
+        type="text"
+        placeholder="Filter by species"
+      />
+    </div>
+
+    <!-- Gender filter -->
+    <div class="filter-item">
+      <label for="gender">Gender</label>
+      <select
+        id="gender"
+        :value="filters.gender"
+        @input="
+          updateFilter('gender', ($event.target as HTMLSelectElement).value)
+        "
+      >
+        <option value="">Any</option>
+        <option value="female">Female</option>
+        <option value="male">Male</option>
+        <option value="genderless">Genderless</option>
+        <option value="unknown">Unknown</option>
+      </select>
+    </div>
+
+    <!-- Clear filters button -->
+    <div class="filter-actions">
+      <button class="clear-button" @click="clearFilters">Clear Filters</button>
+    </div>
+  </div>
+
   <div class="loading" v-if="isLoading"><NSpin size="large" /></div>
 
   <div v-else>
-    <div class="filters-row">
-      <!-- Name filter -->
-      <div class="filter-item">
-        <label for="name">Name</label>
-        <input
-          id="name"
-          :value="filters.name"
-          @input="
-            updateFilter('name', ($event.target as HTMLInputElement).value)
-          "
-          type="text"
-          placeholder="Filter by name"
-        />
-      </div>
-
-      <!-- Status filter -->
-      <div class="filter-item">
-        <label for="status">Status</label>
-        <select
-          id="status"
-          :value="filters.status"
-          @input="
-            updateFilter('status', ($event.target as HTMLSelectElement).value)
-          "
-        >
-          <option value="">Any</option>
-          <option value="alive">Alive</option>
-          <option value="dead">Dead</option>
-          <option value="unknown">Unknown</option>
-        </select>
-      </div>
-
-      <!-- Species filter -->
-      <div class="filter-item">
-        <label for="species">Species</label>
-        <input
-          id="species"
-          :value="filters.species"
-          @input="
-            updateFilter('species', ($event.target as HTMLSelectElement).value)
-          "
-          type="text"
-          placeholder="Filter by species"
-        />
-      </div>
-
-      <!-- Gender filter -->
-      <div class="filter-item">
-        <label for="gender">Gender</label>
-        <select
-          id="gender"
-          :value="filters.gender"
-          @input="
-            updateFilter('gender', ($event.target as HTMLSelectElement).value)
-          "
-        >
-          <option value="">Any</option>
-          <option value="female">Female</option>
-          <option value="male">Male</option>
-          <option value="genderless">Genderless</option>
-          <option value="unknown">Unknown</option>
-        </select>
-      </div>
-
-      <!-- Clear filters button -->
-      <div class="filter-actions">
-        <button class="clear-button" @click="clearFilters">
-          Clear Filters
-        </button>
-      </div>
-    </div>
-
     <div class="container">
       <Card
         v-for="character in characters"
