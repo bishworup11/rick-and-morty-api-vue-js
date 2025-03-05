@@ -46,18 +46,19 @@ function setActiveTab(tab: string) {
   <main>
     <HeroBanner :activeButton="activeButton" @setActiveTab="setActiveTab" />
 
+    <RouterView />
+    <!-- 
     <Suspense>
       <template #default>
-        <!-- <KeepAlive>
+        <KeepAlive>
           <Component :is="activeComponent" />
-        </KeepAlive> -->
-        <RouterView />
+        </KeepAlive>
       </template>
 
       <template #fallback>
         <div>Loading...</div>
       </template>
-    </Suspense>
+    </Suspense> -->
   </main>
 </template>
 

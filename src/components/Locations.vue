@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import LocationCard from "./LocationCard.vue";
 import { onMounted, computed } from "vue";
-import { NPagination } from "naive-ui";
+import { NPagination, NSpin } from "naive-ui";
 import store, { useStore } from "../store";
 
 const locations = computed(() => store.getters["locations/allLocations"]);
@@ -21,20 +21,23 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container">
-    <LocationCard
-      v-for="location in locations"
-      :key="location.id"
-      :location="location"
-    />
-  </div>
-  <div class="pagination">
-    <n-pagination
-      :page="page"
-      :page-count="info?.pages || 1"
-      show-quick-jumper
-      @update:page="handlePageChange"
-    />
+  <div v-if="isLoading"><NSpin size="large" /></div>
+  <div v-else>
+    <div class="container">
+      <LocationCard
+        v-for="location in locations"
+        :key="location.id"
+        :location="location"
+      />
+    </div>
+    <div class="pagination">
+      <n-pagination
+        :page="page"
+        :page-count="info?.pages || 1"
+        show-quick-jumper
+        @update:page="handlePageChange"
+      />
+    </div>
   </div>
 </template>
 

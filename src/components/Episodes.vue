@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import EpisodeCard from "./EpisodeCard.vue";
 import { computed, onMounted } from "vue";
-import { NPagination } from "naive-ui";
+import { NPagination, NSpin } from "naive-ui";
 import store from "../store";
 
 const episodes = computed(() => store.getters["episodes/allEpisodes"]);
@@ -23,20 +23,23 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container">
-    <EpisodeCard
-      v-for="episode in episodes"
-      :key="episode.id"
-      :episode="episode"
-    />
-  </div>
-  <div class="pagination">
-    <n-pagination
-      :page="page"
-      :page-count="info?.pages || 1"
-      show-quick-jumper
-      @update:page="handlePageChange"
-    />
+  <div v-if="isLoading"><NSpin size="large" /></div>
+  <div v-else>
+    <div class="container">
+      <EpisodeCard
+        v-for="episode in episodes"
+        :key="episode.id"
+        :episode="episode"
+      />
+    </div>
+    <div class="pagination">
+      <n-pagination
+        :page="page"
+        :page-count="info?.pages || 1"
+        show-quick-jumper
+        @update:page="handlePageChange"
+      />
+    </div>
   </div>
 </template>
 
