@@ -32,7 +32,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="isLoading"><NSpin size="large" /></div>
+  <div class="loading" v-if="isLoading"><NSpin size="large" /></div>
 
   <div v-else>
     <div class="filters-row">
@@ -128,6 +128,12 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.loading {
+  height: 37vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .container {
   display: flex;
   flex-wrap: wrap;

@@ -34,6 +34,7 @@ const props = defineProps<{ episode: Episode }>();
 </template>
 
 <style scoped>
+
 .episode-card {
   width: 100%;
   max-width: 340px;
