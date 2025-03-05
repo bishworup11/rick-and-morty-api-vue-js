@@ -3,7 +3,7 @@ import HeroBanner from "@/components/HeroBanner.vue";
 import Characters from "@/components/Characters.vue";
 import Locations from "@/components/Locations.vue";
 import Episodes from "@/components/Episodes.vue";
-import { useRoute } from "vue-router";
+import { useRoute, RouterView } from "vue-router";
 
 import { ref, onMounted, shallowRef } from "vue";
 import router from "@/router";
@@ -48,9 +48,10 @@ function setActiveTab(tab: string) {
 
     <Suspense>
       <template #default>
-        <KeepAlive>
+        <!-- <KeepAlive>
           <Component :is="activeComponent" />
-        </KeepAlive>
+        </KeepAlive> -->
+        <RouterView />
       </template>
 
       <template #fallback>
